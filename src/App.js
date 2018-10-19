@@ -1,25 +1,55 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Chart from './Chart';
+import Editor from "./Editor";
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+      this.state = {
+          data: {
+              labels: ["からさ", "うまさ", "ボリューム", "値段"],
+              datasets: [
+                  {
+                      label: 'CoCo壱番屋',
+                      data: [3, 2, 4, 3],
+                      borderColor: "rgba(255, 0, 0, 1)",
+                      backgroundColor: "rgba(255, 0, 0, 0.2)",
+                  }
+              ]
+          },
+          options: {
+              maintainAspectRatio: false,
+              scale: {
+                  ticks: {
+                      min: 0,
+                      max: 5
+                  }
+              },
+          }
+
+      }
+  }
+
+  addData(label, hot, taste, volume, price) {
+      const row = {
+          label: label,
+          data: [hot, taste, volume, price],
+          borderColor: 'rgba(0, 255, 0, 1)',
+          backgroundColor: 'rgba(0, 255, 0, 0.2)',
+      };
+      let newData = this.state.data;
+      newData.datasets.push(row);
+      this.setState({data: newData})
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Chart data={this.state.data} options={this.state.options}/>
+          <hr/>
+        <Editor add={(label, hot, taste, volume, price) => this.addData(label, hot, taste, volume, price)}/>
       </div>
     );
   }
